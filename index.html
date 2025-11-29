@@ -1,138 +1,85 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة خطوتك التعليمية</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة خطوتك التعليمية</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-<body onload="initApp()">
+<body>
+    <!-- النجوم المتلألئة -->
+    <div class="stars" id="star-container"></div>
 
-<!-- ⭐ النجوم الخلفية -->
-<div class="stars" id="star-container"></div>
+    <div class="header-container">
+        <h1 class="main-title">خطوتك التعليمية</h1>
+        <h3 id="sub-title">منصتك التعليمية المتكاملة</h3>
+    </div>
 
-<!-- الهيدر -->
-<div class="header-container">
-    <h1 class="main-title">خطوتك التعليمية</h1>
-    <p id="sub-title">منصتك التعليمية المتكاملة</p>
-</div>
+    <div class="app-container">
 
-<!-- الحاوية الرئيسية -->
-<div class="app-container">
-
-    <!-- صفحة تسجيل الدخول -->
-    <section id="login-view" class="view-section active">
-        <div class="login-wrapper">
-            <input type="text" id="access-code-input" class="login-input" placeholder="ادخل الكود">
-            <button class="btn-main" onclick="attemptLogin()">دخول</button>
-            <div class="contact-footer">
-                للتواصل: <a href="https://wa.me/201234567890" target="_blank">واتساب الدعم</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- لوحة الطالب -->
-    <section id="student-dashboard-view" class="view-section">
-        <div class="dashboard-content-flow">
-
-            <div class="quote-box" id="dynamic-greeting">مرحباً بك!</div>
-
-            <!-- كروت المواد -->
-            <div id="subjects-grid" class="grid-container"></div>
-
-            <!-- كروت المدرسين -->
-            <h3 style="margin-top:30px; color: var(--gold); text-align:center;">المدرسين</h3>
-            <div id="teachers-grid" class="grid-container"></div>
-
-            <!-- شريط التقدم -->
-            <div class="progress-container">
-                <div class="progress-title">تقدمك الأكاديمي</div>
-                <div class="progress-bar-wrapper">
-                    <div class="progress-bar" id="academic-progress-bar"></div>
-                </div>
-                <div class="progress-text">النسبة: <span id="progress-percentage">0%</span></div>
-            </div>
-
-            <!-- معلومات الطالب -->
-            <div class="separation-bar">معلومات الطالب</div>
-            <div class="student-info-section">
-                <div class="student-info">
-                    <p>الاسم: <strong id="student-name-display"></strong></p>
-                    <p>التخصص: <strong id="student-stream-display"></strong></p>
-                    <p>الكود: <span class="code-value" id="student-code-display"></span></p>
-                    <p>صلاحية الكود حتى: <strong id="expiry-date-display"></strong></p>
-                </div>
-                <div class="sidebar-buttons">
-                    <button class="btn-logout" onclick="logoutUser()">تسجيل الخروج</button>
+        <!-- ======= صفحة تسجيل الدخول ======= -->
+        <div id="login-view" class="view-section active">
+            <div class="login-wrapper">
+                <input type="text" id="access-code-input" class="login-input" placeholder="أدخل الكود هنا">
+                <button class="btn-main" onclick="attemptLogin()">دخول</button>
+                <div class="contact-footer">
+                    للتواصل عبر واتساب: <a href="https://wa.me/0123456789" target="_blank">اضغط هنا</a>
                 </div>
             </div>
-
         </div>
-    </section>
 
-    <!-- صفحة المدرسين -->
-    <section id="teachers-view" class="view-section">
-        <button class="btn-back" onclick="showView('student-dashboard-view')"><i class="fas fa-arrow-left"></i> العودة</button>
-        <h2 id="selected-subject-header"></h2>
-        <div id="teachers-grid" class="grid-container"></div>
-    </section>
+        <!-- ======= لوحة الطالب ======= -->
+        <div id="student-dashboard-view" class="view-section">
+            <div class="dashboard-content-flow">
+                <div id="dynamic-greeting"></div>
+                <div class="quote-box">ابدأ يومك بالمراجعة اليومية!</div>
+                <div class="grid-container" id="subjects-grid"></div>
 
-    <!-- صفحة الكورسات -->
-    <section id="courses-view" class="view-section">
-        <button class="btn-back" onclick="showView('teachers-view')"><i class="fas fa-arrow-left"></i> العودة</button>
-        <h2 id="selected-teacher-header"></h2>
-        <div class="courses-flex"></div>
-    </section>
-
-    <!-- صفحة الأسابيع -->
-    <section id="weeks-view" class="view-section">
-        <button class="btn-back" onclick="showView('courses-view')"><i class="fas fa-arrow-left"></i> العودة</button>
-        <h2 id="selected-week-header"></h2>
-        <div id="weeks-grid" class="grid-container"></div>
-    </section>
-
-    <!-- لوحة المشرف -->
-    <section id="admin-panel-view" class="view-section">
-        <div class="admin-panel">
-            <h2>لوحة المشرف</h2>
-            <div class="admin-form">
-                <input type="text" id="new-student-name" class="admin-input" placeholder="اسم الطالب">
-                <select id="new-student-stream" class="admin-select">
-                    <option value="science">علمي علوم</option>
-                    <option value="math">علمي رياضة</option>
-                </select>
-                <input type="number" id="new-code-duration" class="admin-input" placeholder="مدة الكود بالساعات" value="24">
-                <button class="btn-admin btn-generate" onclick="generateNewCode()">إنشاء كود</button>
+                <div class="separation-bar">معلومات الطالب</div>
+                <div class="student-info-section">
+                    <div class="student-info">
+                        <p>الاسم: <strong id="student-name-display"></strong></p>
+                        <p>الشعبة: <strong id="student-stream-display"></strong></p>
+                        <p>الكود: <span class="code-value" id="student-code-display"></span></p>
+                        <p>انتهاء الكود: <strong id="expiry-date-display"></strong></p>
+                    </div>
+                    <div class="sidebar-buttons">
+                        <button class="btn-logout" onclick="logoutUser()">تسجيل الخروج</button>
+                    </div>
+                </div>
             </div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>اسم الطالب</th>
-                        <th>الكود</th>
-                        <th>التخصص</th>
-                        <th>تاريخ الانتهاء</th>
-                        <th>الحالة</th>
-                    </tr>
-                </thead>
-                <tbody id="codes-table-body"></tbody>
-            </table>
         </div>
-    </section>
 
-</div>
-
-<!-- نافذة الفيديو المنبثقة -->
-<div id="video-modal" class="modal-overlay">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeVideoModal()">&times;</span>
-        <h3 class="modal-title" id="modal-video-title"></h3>
-        <div class="video-container">
-            <iframe id="video-iframe" src="" frameborder="0" allowfullscreen></iframe>
+        <!-- ======= لوحة المشرف ======= -->
+        <div id="admin-panel-view" class="view-section">
+            <div class="admin-panel">
+                <h2>لوحة إدارة الأكواد والطلاب</h2>
+                <div class="admin-form">
+                    <input type="text" id="new-student-name" class="admin-input" placeholder="اسم الطالب">
+                    <select id="new-student-stream" class="admin-select">
+                        <option value="science">علمي علوم 🧬</option>
+                        <option value="math">علمي رياضة 📐</option>
+                    </select>
+                    <input type="number" id="new-code-duration" class="admin-input" placeholder="مدة الكود بالساعات" value="24">
+                    <button class="btn-admin btn-generate" onclick="generateNewCode()">إنشاء كود</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>اسم الطالب</th>
+                            <th>الكود</th>
+                            <th>الشعبة</th>
+                            <th>انتهاء الكود</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="codes-table-body"></tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
-<script src="script.js"></script>
 </body>
-  </html>
+</html>
